@@ -108,11 +108,21 @@
         targetURL,
         popupType = 'popup'
     ) {
+        // https://github.com/chrisaljoudi/uBlock/issues/323
+        // https://github.com/chrisaljoudi/uBlock/issues/1142
+        // https://github.com/uBlockOrigin/uBlock-issues/issues/1616
+        //   Don't block if uBO is turned off in popup's context
+        if (
+            µb.getNetFilteringSwitch(targetURL) === false ||
+            µb.getNetFilteringSwitch(µb.normalizePageURL(0, targetURL)) === false
+        ) {
+            return 0;
+        }
+
         fctxt.setTabOriginFromURL(rootOpenerURL)
              .setDocOriginFromURL(localOpenerURL || rootOpenerURL)
              .setURL(targetURL)
              .setType('popup');
-        let result;
 
         // https://github.com/gorhill/uBlock/issues/1735
         //   Do not bail out on `data:` URI, they are commonly used for popups.
@@ -153,7 +163,7 @@
             // https://github.com/gorhill/uBlock/issues/581
             //   Take into account popup-specific rules in dynamic URL
             //   filtering, OR generic allow rules.
-            result = µb.sessionURLFiltering.evaluateZ(
+            let result = µb.sessionURLFiltering.evaluateZ(
                 fctxt.getTabHostname(),
                 targetURL,
                 popupType
@@ -181,16 +191,11 @@
             }
         }
 
-        // https://github.com/chrisaljoudi/uBlock/issues/323
-        // https://github.com/chrisaljoudi/uBlock/issues/1142
-        //   Don't block if uBlock is turned off in popup's context
-        if ( µb.getNetFilteringSwitch(targetURL) ) {
-            fctxt.type = popupType;
-            result = µb.staticNetFilteringEngine.matchString(fctxt, 0b0001);
-            if ( result !== 0 ) {
-                fctxt.filter = µb.staticNetFilteringEngine.toLogData();
-                return result;
-            }
+        fctxt.type = popupType;
+        const result = µb.staticNetFilteringEngine.matchString(fctxt, 0b0001);
+        if ( result !== 0 ) {
+            fctxt.filter = µb.staticNetFilteringEngine.toLogData();
+            return result;
         }
 
         return 0;
@@ -360,7 +365,7 @@
         // filtering pane.
         const pageStore = µb.pageStoreFromTabId(openerTabId);
         if ( pageStore ) {
-            pageStore.journalAddRequest(fctxt.getHostname(), result);
+            pageStore.journalAddRequest(fctxt, result);
             pageStore.popupBlockedCount += 1;
         }
 
@@ -875,18 +880,23 @@ vAPI.Tabs = class extends vAPI.Tabs {
     onNavigation(details) {
         super.onNavigation(details);
         const µb = µBlock;
-        if ( details.frameId === 0 ) {
-            µb.tabContextManager.commit(details.tabId, details.url);
-            let pageStore = µb.bindTabToPageStore(details.tabId, 'tabCommitted');
-            if ( pageStore ) {
-                pageStore.journalAddRootFrame('committed', details.url);
+        const { frameId, tabId, url } = details;
+        if ( frameId === 0 ) {
+            µb.tabContextManager.commit(tabId, url);
+            const pageStore = µb.bindTabToPageStore(tabId, 'tabCommitted');
+            if ( pageStore !== null ) {
+                pageStore.journalAddRootFrame('committed', url);
             }
         }
-        if ( µb.canInjectScriptletsNow && µb.URI.isNetworkURI(details.url) ) {
-            const pageStore = µb.pageStoreFromTabId(details.tabId);
-            if ( pageStore !== null && pageStore.getNetFilteringSwitch() ) {
-                µb.scriptletFilteringEngine.injectNow(details);
-            }
+        const pageStore = µb.pageStoreFromTabId(tabId);
+        if ( pageStore === null ) { return; }
+        pageStore.setFrameURL(details);
+        if (
+            µb.canInjectScriptletsNow &&
+            µb.URI.isNetworkURI(url) &&
+            pageStore.getNetFilteringSwitch()
+        ) {
+            µb.scriptletFilteringEngine.injectNow(details);
         }
     }
 
@@ -1033,14 +1043,15 @@ vAPI.tabs = new vAPI.Tabs();
         let badge = '';
         let color = '#666';
 
-        let pageStore = µb.pageStoreFromTabId(tabId);
+        const pageStore = µb.pageStoreFromTabId(tabId);
         if ( pageStore !== null ) {
             state = pageStore.getNetFilteringSwitch() ? 1 : 0;
             if ( state === 1 ) {
-                if ( (parts & 0b0010) !== 0 && pageStore.perLoadBlockedRequestCount ) {
-                    badge = µb.formatCount(
-                        pageStore.perLoadBlockedRequestCount
-                    );
+                if ( (parts & 0b0010) !== 0 ) {
+                    const blockCount = pageStore.counts.blocked.any;
+                    if ( blockCount !== 0 ) {
+                        badge = µb.formatCount(blockCount);
+                    }
                 }
                 if ( (parts & 0b0100) !== 0 ) {
                     color = computeBadgeColor(
@@ -1066,7 +1077,7 @@ vAPI.tabs = new vAPI.Tabs();
     return function(tabId, newParts = 0b0111) {
         if ( typeof tabId !== 'number' ) { return; }
         if ( vAPI.isBehindTheSceneTabId(tabId) ) { return; }
-        let currentParts = tabIdToDetails.get(tabId);
+        const currentParts = tabIdToDetails.get(tabId);
         if ( currentParts === newParts ) { return; }
         if ( currentParts === undefined ) {
             self.requestIdleCallback(

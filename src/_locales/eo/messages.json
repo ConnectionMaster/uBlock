@@ -64,7 +64,7 @@
     "description": "Title for the advanced settings page"
   },
   "popupPowerSwitchInfo": {
-    "message": "Klako: malŝalti/ŝalti uBlock₀ por ĉi tiu retejo.\n\nStir+klako: malŝalti uBlock₀ nur en ĉi tiu paĝo.",
+    "message": "Klako: malŝalti/ŝalti uBlock₀ por ĉi tiu retejo.\n\nCtrl+klako: malŝalti uBlock₀ nur en ĉi tiu paĝo.",
     "description": "English: Click: disable/enable uBlock₀ for this site.\n\nCtrl+click: disable uBlock₀ only on this page."
   },
   "popupPowerSwitchInfo1": {
@@ -267,6 +267,14 @@
     "message": "Versio",
     "description": "Example of use: Version 1.26.4"
   },
+  "popup3pScriptFilterTip": {
+    "message": "↑: Emphasize rows which have 3rd-party scripts",
+    "description": "Tooltip shown when hovering small filtering widget in '3rd-party scripts' cell"
+  },
+  "popup3pFrameFilterTip": {
+    "message": "↑: Emphasize rows which have 3rd-party frames",
+    "description": "Tooltip shown when hovering small filtering widget in '3rd-party frames' cell"
+  },
   "pickerCreate": {
     "message": "Krei",
     "description": "English: Create"
@@ -370,6 +378,10 @@
   "settingsNoCSPReportsPrompt": {
     "message": "Bloki CSP-raportojn",
     "description": "background information: https://github.com/gorhill/uBlock/issues/3150"
+  },
+  "settingsUncloakCnamePrompt": {
+    "message": "Uncloak canonical names",
+    "description": "background information: https://github.com/uBlockOrigin/uBlock-issues/issues/1513"
   },
   "settingsLastRestorePrompt": {
     "message": "Lasta restaŭro:",
@@ -560,7 +572,7 @@
     "description": "English: a sort option for list of rules."
   },
   "rulesSortBySource": {
-    "message": "Source",
+    "message": "Fonto",
     "description": "English: a sort option for list of rules."
   },
   "rulesSortByDestination": {
@@ -835,6 +847,10 @@
     "message": "Markdown",
     "description": "Label for radio-button to pick export text format"
   },
+  "aboutPrivacyPolicy": {
+    "message": "Privacy policy",
+    "description": "Link to privacy policy on GitHub (English)"
+  },
   "aboutChangelog": {
     "message": "Ŝanĝoprotokolo",
     "description": ""
@@ -912,7 +928,7 @@
     "description": "No longer used"
   },
   "subscribeButton": {
-    "message": "Subscribe",
+    "message": "Sekvi",
     "description": "For the button used to subscribe to a filter list"
   },
   "elapsedOneMinuteAgo": {
@@ -1029,6 +1045,10 @@
   },
   "contextMenuBlockElementInFrame": {
     "message": "Block element in frame...",
+    "description": "An entry in the browser's contextual menu"
+  },
+  "contextMenuSubscribeToList": {
+    "message": "Subscribe to filter list...",
     "description": "An entry in the browser's contextual menu"
   },
   "contextMenuTemporarilyAllowLargeMediaElements": {

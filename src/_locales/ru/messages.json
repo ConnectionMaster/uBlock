@@ -267,6 +267,14 @@
     "message": "Версия",
     "description": "Example of use: Version 1.26.4"
   },
+  "popup3pScriptFilterTip": {
+    "message": "↑: Подчеркивать строки, которые содержат 3rd-party скрипты",
+    "description": "Tooltip shown when hovering small filtering widget in '3rd-party scripts' cell"
+  },
+  "popup3pFrameFilterTip": {
+    "message": "↑: Подчеркивать строки, которые содержат 3rd-party фреймы",
+    "description": "Tooltip shown when hovering small filtering widget in '3rd-party frames' cell"
+  },
   "pickerCreate": {
     "message": "Создать",
     "description": "English: Create"
@@ -370,6 +378,10 @@
   "settingsNoCSPReportsPrompt": {
     "message": "Блокировать CSP отчеты",
     "description": "background information: https://github.com/gorhill/uBlock/issues/3150"
+  },
+  "settingsUncloakCnamePrompt": {
+    "message": "Раскрывать CNAME записи",
+    "description": "background information: https://github.com/uBlockOrigin/uBlock-issues/issues/1513"
   },
   "settingsLastRestorePrompt": {
     "message": "Последнее восстановление:",
@@ -835,6 +847,10 @@
     "message": "Markdown",
     "description": "Label for radio-button to pick export text format"
   },
+  "aboutPrivacyPolicy": {
+    "message": "Политика конфиденциальности",
+    "description": "Link to privacy policy on GitHub (English)"
+  },
   "aboutChangelog": {
     "message": "Список изменений",
     "description": ""
@@ -1029,6 +1045,10 @@
   },
   "contextMenuBlockElementInFrame": {
     "message": "Заблокировать элемент во фрейме...",
+    "description": "An entry in the browser's contextual menu"
+  },
+  "contextMenuSubscribeToList": {
+    "message": "Подписаться на список фильтров...",
     "description": "An entry in the browser's contextual menu"
   },
   "contextMenuTemporarilyAllowLargeMediaElements": {

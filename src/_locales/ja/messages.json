@@ -267,6 +267,14 @@
     "message": "バージョン",
     "description": "Example of use: Version 1.26.4"
   },
+  "popup3pScriptFilterTip": {
+    "message": "↑: サードパーティのスクリプトを含む行を強調する",
+    "description": "Tooltip shown when hovering small filtering widget in '3rd-party scripts' cell"
+  },
+  "popup3pFrameFilterTip": {
+    "message": "↑: サードパーティフレームがある行を強調します",
+    "description": "Tooltip shown when hovering small filtering widget in '3rd-party frames' cell"
+  },
   "pickerCreate": {
     "message": "作成",
     "description": "English: Create"
@@ -370,6 +378,10 @@
   "settingsNoCSPReportsPrompt": {
     "message": "CSPレポートをブロックする",
     "description": "background information: https://github.com/gorhill/uBlock/issues/3150"
+  },
+  "settingsUncloakCnamePrompt": {
+    "message": "CNAMEクローキングを制限",
+    "description": "background information: https://github.com/uBlockOrigin/uBlock-issues/issues/1513"
   },
   "settingsLastRestorePrompt": {
     "message": "最後の復元:",
@@ -835,6 +847,10 @@
     "message": "Markdown 形式",
     "description": "Label for radio-button to pick export text format"
   },
+  "aboutPrivacyPolicy": {
+    "message": "プライバシーポリシー",
+    "description": "Link to privacy policy on GitHub (English)"
+  },
   "aboutChangelog": {
     "message": "更新履歴",
     "description": ""
@@ -1029,6 +1045,10 @@
   },
   "contextMenuBlockElementInFrame": {
     "message": "フレーム内の要素をブロック...",
+    "description": "An entry in the browser's contextual menu"
+  },
+  "contextMenuSubscribeToList": {
+    "message": "フィルターリストを登録...",
     "description": "An entry in the browser's contextual menu"
   },
   "contextMenuTemporarilyAllowLargeMediaElements": {

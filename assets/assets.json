@@ -1,10 +1,17 @@
 {
 	"assets.json": {
 		"content": "internal",
-		"updateAfter": 13,
+		"updateAfter": 7,
 		"contentURL": [
 			"https://raw.githubusercontent.com/gorhill/uBlock/master/assets/assets.json",
 			"assets/assets.json"
+		],
+		"cdnURLs": [
+			"https://gitcdn.xyz/repo/gorhill/uBlock/master/assets/assets.json",
+			"https://cdn.jsdelivr.net/gh/gorhill/uBlock@master/assets/assets.json",
+			"https://cdn.statically.io/gh/gorhill/uBlock/master/assets/assets.json",
+			"https://combinatronics.io/gorhill/uBlock/master/assets/assets.json",
+			"https://raw.githubusercontent.com/gorhill/uBlock/master/assets/assets.json"
 		]
 	},
 	"public_suffix_list.dat": {
@@ -22,6 +29,12 @@
 		"contentURL": [
 			"https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/badlists.txt",
 			"assets/ublock/badlists.txt"
+		],
+		"cdnURLs": [
+			"https://gitcdn.xyz/repo/uBlockOrigin/uAssets/master/filters/badlists.txt",
+			"https://cdn.jsdelivr.net/gh/uBlockOrigin/uAssets@master/filters/badlists.txt",
+			"https://cdn.statically.io/gh/uBlockOrigin/uAssets/master/filters/badlists.txt",
+			"https://combinatronics.io/uBlockOrigin/uAssets/master/filters/badlists.txt"
 		]
 	},
 	"ublock-filters": {
@@ -35,7 +48,9 @@
 		"cdnURLs": [
 			"https://gitcdn.xyz/repo/uBlockOrigin/uAssets/master/filters/filters.txt",
 			"https://cdn.jsdelivr.net/gh/uBlockOrigin/uAssets@master/filters/filters.txt",
-			"https://cdn.statically.io/gh/uBlockOrigin/uAssets/master/filters/filters.txt"
+			"https://cdn.statically.io/gh/uBlockOrigin/uAssets/master/filters/filters.txt",
+			"https://combinatronics.io/uBlockOrigin/uAssets/master/filters/filters.txt",
+			"https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/filters.txt"
 		],
 		"supportURL": "https://github.com/uBlockOrigin/uAssets/issues"
 	},
@@ -47,6 +62,12 @@
 			"https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/badware.txt",
 			"assets/ublock/badware.txt"
 		],
+		"cdnURLs": [
+			"https://gitcdn.xyz/repo/uBlockOrigin/uAssets/master/filters/badware.txt",
+			"https://cdn.jsdelivr.net/gh/uBlockOrigin/uAssets@master/filters/badware.txt",
+			"https://cdn.statically.io/gh/uBlockOrigin/uAssets/master/filters/badware.txt",
+			"https://combinatronics.io/uBlockOrigin/uAssets/master/filters/badware.txt"
+		],
 		"supportURL": "https://github.com/gorhill/uBlock/wiki/Badware-risks",
 		"instructionURL": "https://github.com/gorhill/uBlock/wiki/Badware-risks"
 	},
@@ -57,6 +78,12 @@
 		"contentURL": [
 			"https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/privacy.txt",
 			"assets/ublock/privacy.txt"
+		],
+		"cdnURLs": [
+			"https://gitcdn.xyz/repo/uBlockOrigin/uAssets/master/filters/privacy.txt",
+			"https://cdn.jsdelivr.net/gh/uBlockOrigin/uAssets@master/filters/privacy.txt",
+			"https://cdn.statically.io/gh/uBlockOrigin/uAssets/master/filters/privacy.txt",
+			"https://combinatronics.io/uBlockOrigin/uAssets/master/filters/privacy.txt"
 		]
 	},
 	"ublock-abuse": {
@@ -66,6 +93,12 @@
 		"contentURL": [
 			"https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/resource-abuse.txt",
 			"assets/ublock/resource-abuse.txt"
+		],
+		"cdnURLs": [
+			"https://gitcdn.xyz/repo/uBlockOrigin/uAssets/master/filters/resource-abuse.txt",
+			"https://cdn.jsdelivr.net/gh/uBlockOrigin/uAssets@master/filters/resource-abuse.txt",
+			"https://cdn.statically.io/gh/uBlockOrigin/uAssets/master/filters/resource-abuse.txt",
+			"https://combinatronics.io/uBlockOrigin/uAssets/master/filters/resource-abuse.txt"
 		]
 	},
 	"ublock-unbreak": {
@@ -79,7 +112,8 @@
 		"cdnURLs": [
 			"https://gitcdn.xyz/repo/uBlockOrigin/uAssets/master/filters/unbreak.txt",
 			"https://cdn.jsdelivr.net/gh/uBlockOrigin/uAssets@master/filters/unbreak.txt",
-			"https://cdn.statically.io/gh/uBlockOrigin/uAssets/master/filters/unbreak.txt"
+			"https://cdn.statically.io/gh/uBlockOrigin/uAssets/master/filters/unbreak.txt",
+			"https://combinatronics.io/uBlockOrigin/uAssets/master/filters/unbreak.txt"
 		]
 	},
 	"adguard-generic": {
@@ -122,6 +156,23 @@
 		"supportURL": "https://github.com/AdguardTeam/AdguardFilters#adguard-filters",
 		"instructionURL": "https://kb.adguard.com/en/general/adguard-ad-filters"
 	},
+	"adguard-spyware-url": {
+		"content": "filters",
+		"group": "privacy",
+		"off": true,
+		"title": "AdGuard URL Tracking Protection",
+		"contentURL": "https://filters.adtidy.org/extension/ublock/filters/17.txt",
+		"supportURL": "https://github.com/AdguardTeam/AdguardFilters#adguard-filters",
+		"instructionURL": "https://kb.adguard.com/en/general/adguard-ad-filters"
+	},
+	"block-lan": {
+		"content": "filters",
+		"group": "privacy",
+		"off": true,
+		"title": "Block access to LAN",
+		"contentURL": "https://raw.githubusercontent.com/gwarser/filter-lists/master/lan-block.txt",
+		"supportURL": "https://github.com/gwarser/filter-lists"
+	},
 	"easyprivacy": {
 		"content": "filters",
 		"group": "privacy",
@@ -133,14 +184,6 @@
 			"assets/thirdparties/easylist-downloads.adblockplus.org/easyprivacy.txt"
 		],
 		"supportURL": "https://forums.lanik.us/"
-	},
-	"fanboy-enhanced": {
-		"content": "filters",
-		"group": "privacy",
-		"off": true,
-		"title": "Fanboy’s Enhanced Tracking List",
-		"contentURL": "https://www.fanboy.co.nz/enhancedstats.txt",
-		"supportURL": "https://github.com/ryanbr/fanboy-adblock/issues"
 	},
 	"urlhaus-1": {
 		"content": "filters",
@@ -285,20 +328,10 @@
 		"content": "filters",
 		"group": "regions",
 		"off": true,
-		"title": "CHN: EasyList China (中文)",
+		"title": "CHN: AdGuard Chinese (中文)",
 		"lang": "zh",
-		"contentURL": "https://easylist-downloads.adblockplus.org/easylistchina.txt",
-		"supportURL": "http://abpchina.org/forum/forum.php"
-	},
-	"CHN-1": {
-		"content": "filters",
-		"group": "regions",
-		"off": true,
-		"title": "CHN: CJX's EasyList Lite",
-		"lang": "zh",
-		"contentURL": "https://raw.githubusercontent.com/cjx82630/cjxlist/master/cjxlist.txt",
-		"supportURL": "https://github.com/cjx82630/cjxlist",
-		"instructionURL": "http://abpchina.org/forum/forum.php?mod=viewthread&tid=29667"
+		"contentURL": "https://filters.adtidy.org/extension/ublock/filters/224.txt",
+		"supportURL": "https://github.com/AdguardTeam/AdguardFilters#adguard-filters"
 	},
 	"CZE-0": {
 		"content": "filters",
@@ -381,7 +414,11 @@
 		"off": true,
 		"title": "IRN: Adblock-Iran",
 		"lang": "fa",
-		"contentURL": "https://gitcdn.xyz/repo/farrokhi/adblock-iran/master/filter.txt",
+		"contentURL": [
+			"https://gitcdn.xyz/repo/farrokhi/adblock-iran/master/filter.txt",
+			"https://combinatronics.io/farrokhi/adblock-iran/master/filter.txt",
+			"https://cdn.statically.io/gh/farrokhi/adblock-iran/master/filter.txt"
+		],
 		"supportURL": "https://github.com/farrokhi/adblock-iran"
 	},
 	"ISL-0": {
@@ -580,7 +617,7 @@
 		"off": true,
 		"title": "VIE: ABPVN List",
 		"lang": "vi",
-		"contentURL": "https://raw.githubusercontent.com/abpvn/abpvn/master/filter/abpvn.txt",
+		"contentURL": "https://raw.githubusercontent.com/abpvn/abpvn/master/filter/abpvn_ublock.txt",
 		"supportURL": "https://abpvn.com/"
 	}
 }

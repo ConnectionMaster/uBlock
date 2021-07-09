@@ -69,7 +69,7 @@ const redirectableResources = new Map([
         alias: 'static.chartbeat.com/chartbeat.js',
     } ],
     [ 'click2load.html', {
-        params: [ 'url' ],
+        params: [ 'aliasURL', 'url' ],
     } ],
     [ 'doubleclick_instream_ad_status.js', {
         alias: 'doubleclick.net/instream/ad_status.js',
@@ -79,7 +79,11 @@ const redirectableResources = new Map([
         data: 'text',   // Important!
     } ],
     [ 'google-analytics_analytics.js', {
-        alias: 'google-analytics.com/analytics.js',
+        alias: [
+            'google-analytics.com/analytics.js',
+            'googletagmanager_gtm.js',
+            'googletagmanager.com/gtm.js'
+        ],
         data: 'text',
     } ],
     [ 'google-analytics_cx_api.js', {
@@ -94,10 +98,6 @@ const redirectableResources = new Map([
     } ],
     [ 'googlesyndication_adsbygoogle.js', {
         alias: 'googlesyndication.com/adsbygoogle.js',
-        data: 'text',
-    } ],
-    [ 'googletagmanager_gtm.js', {
-        alias: 'googletagmanager.com/gtm.js',
         data: 'text',
     } ],
     [ 'googletagservices_gpt.js', {

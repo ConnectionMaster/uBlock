@@ -44,7 +44,7 @@
     "description": "appears as tab name in dashboard"
   },
   "shortcutsPageName": {
-    "message": "Genväg",
+    "message": "Genvägar",
     "description": "appears as tab name in dashboard"
   },
   "statsPageName": {
@@ -267,6 +267,14 @@
     "message": "Version",
     "description": "Example of use: Version 1.26.4"
   },
+  "popup3pScriptFilterTip": {
+    "message": "↑: Markera rader som har tredjepartsskript",
+    "description": "Tooltip shown when hovering small filtering widget in '3rd-party scripts' cell"
+  },
+  "popup3pFrameFilterTip": {
+    "message": "↑: Markera rader som har tredjepartsramar",
+    "description": "Tooltip shown when hovering small filtering widget in '3rd-party frames' cell"
+  },
   "pickerCreate": {
     "message": "Skapa",
     "description": "English: Create"
@@ -371,6 +379,10 @@
     "message": "Blockera CSP-rapporter",
     "description": "background information: https://github.com/gorhill/uBlock/issues/3150"
   },
+  "settingsUncloakCnamePrompt": {
+    "message": "Visa CNAME-poster",
+    "description": "background information: https://github.com/uBlockOrigin/uBlock-issues/issues/1513"
+  },
   "settingsLastRestorePrompt": {
     "message": "Senast återställd:",
     "description": "English: Last restore:"
@@ -460,7 +472,7 @@
     "description": "The label for the checkbox used to import external filter lists"
   },
   "3pExternalListsHint": {
-    "message": "En webbadress per rad. Ogiltiga webbadresser kommer inte att aviseras.",
+    "message": "En webbadress per rad. Ogiltiga webbadresser ignoreras tyst.",
     "description": "Short information about how to use the textarea to import external filter lists by URL"
   },
   "3pExternalListObsolete": {
@@ -835,6 +847,10 @@
     "message": "Markdown",
     "description": "Label for radio-button to pick export text format"
   },
+  "aboutPrivacyPolicy": {
+    "message": "Integritetspolicy",
+    "description": "Link to privacy policy on GitHub (English)"
+  },
   "aboutChangelog": {
     "message": "Ändringslogg",
     "description": ""
@@ -896,7 +912,7 @@
     "description": "Message asking user to confirm restore"
   },
   "aboutRestoreDataError": {
-    "message": "Datan kunde inte läsas eller är ogiltig",
+    "message": "Data kunde inte läsas eller är ogiltiga",
     "description": "Message to display when an error occurred during restore"
   },
   "aboutResetDataConfirm": {
@@ -908,7 +924,7 @@
     "description": "English: Network error: {{msg}}"
   },
   "subscriberConfirm": {
-    "message": "Lägg till följande webbadress till din anpassade filterlista?\n\nTitel: \"{{title}}\"\nWebbadress: {{url}}",
+    "message": "Lägg till följande webbadress till dina anpassade filterlistor?\n\nTitel: \"{{title}}\"\nWebbadress: {{url}}",
     "description": "No longer used"
   },
   "subscribeButton": {
@@ -1029,6 +1045,10 @@
   },
   "contextMenuBlockElementInFrame": {
     "message": "Blockera element i ramar...",
+    "description": "An entry in the browser's contextual menu"
+  },
+  "contextMenuSubscribeToList": {
+    "message": "Prenumerera på filterlista...",
     "description": "An entry in the browser's contextual menu"
   },
   "contextMenuTemporarilyAllowLargeMediaElements": {

@@ -106,25 +106,25 @@ const initializeTabs = async function() {
 const onVersionReady = function(lastVersion) {
     if ( lastVersion === vAPI.app.version ) { return; }
 
-    // Since built-in resources may have changed since last version, we
-    // force a reload of all resources.
-    µb.redirectEngine.invalidateResourcesSelfie();
+    vAPI.storage.set({ version: vAPI.app.version });
 
     const lastVersionInt = vAPI.app.intFromVersion(lastVersion);
     if ( lastVersionInt === 0 ) { return; }
 
+    // Since built-in resources may have changed since last version, we
+    // force a reload of all resources.
+    µb.redirectEngine.invalidateResourcesSelfie();
+
     // https://github.com/LiCybora/NanoDefenderFirefox/issues/196
     //   Toggle on the blocking of CSP reports by default for Firefox.
     if (
-        vAPI.webextFlavor.soup.has('firefox') &&
-        lastVersionInt <= 1031003011
+        lastVersionInt <= 1031003011 &&
+        vAPI.webextFlavor.soup.has('firefox')
     ) {
         µb.sessionSwitches.toggle('no-csp-reports', '*', 1);
         µb.permanentSwitches.toggle('no-csp-reports', '*', 1);
         µb.saveHostnameSwitches();
     }
-
-    vAPI.storage.set({ version: vAPI.app.version });
 };
 
 /******************************************************************************/
@@ -160,24 +160,49 @@ const onNetWhitelistReady = function(netWhitelistRaw, adminExtra) {
 // User settings are in memory
 
 const onUserSettingsReady = function(fetched) {
-    const userSettings = µb.userSettings;
+    // `externalLists` will be deprecated in some future, it is kept around
+    // for forward compatibility purpose, and should reflect the content of
+    // `importedLists`.
+    if ( Array.isArray(fetched.externalLists) ) {
+        fetched.externalLists = fetched.externalLists.join('\n');
+        vAPI.storage.set({ externalLists: fetched.externalLists });
+    }
+    if (
+        fetched.importedLists.length === 0 &&
+        fetched.externalLists !== ''
+    ) {
+        fetched.importedLists =
+            fetched.externalLists.trim().split(/[\n\r]+/);
+    }
 
-    fromFetch(userSettings, fetched);
+    // https://github.com/uBlockOrigin/uBlock-issues/issues/1513
+    //   Transition nicely.
+    //   TODO: remove when current version of uBO is well past 1.34.0.
+    if ( typeof µb.hiddenSettings.cnameUncloak === false ) {
+        fetched.cnameUncloakEnabled = false;
+        µb.hiddenSettings.cnameUncloak = true;
+        µb.saveHiddenSettings();
+    }
+    µb.hiddenSettingsDefault.cnameUncloak = undefined;
+    µb.hiddenSettings.cnameUncloak = undefined;
+
+    fromFetch(µb.userSettings, fetched);
 
     if ( µb.privacySettingsSupported ) {
         vAPI.browserSettings.set({
-            'hyperlinkAuditing': !userSettings.hyperlinkAuditingDisabled,
-            'prefetching': !userSettings.prefetchingDisabled,
-            'webrtcIPAddress': !userSettings.webrtcIPAddressHidden
+            'hyperlinkAuditing': !µb.userSettings.hyperlinkAuditingDisabled,
+            'prefetching': !µb.userSettings.prefetchingDisabled,
+            'webrtcIPAddress': !µb.userSettings.webrtcIPAddressHidden
         });
     }
 
-    µb.permanentFirewall.fromString(fetched.dynamicFilteringString);
-    µb.sessionFirewall.assign(µb.permanentFirewall);
-    µb.permanentURLFiltering.fromString(fetched.urlFilteringString);
-    µb.sessionURLFiltering.assign(µb.permanentURLFiltering);
-    µb.permanentSwitches.fromString(fetched.hostnameSwitchesString);
-    µb.sessionSwitches.assign(µb.permanentSwitches);
+    // https://github.com/uBlockOrigin/uBlock-issues/issues/1513
+    if (
+        vAPI.net.canUncloakCnames &&
+        µb.userSettings.cnameUncloakEnabled === false
+    ) {
+        vAPI.net.setOptions({ cnameUncloakEnabled: false });
+    }
 };
 
 /******************************************************************************/
@@ -213,8 +238,15 @@ const onFirstFetchReady = function(fetched, adminExtra) {
 
     // Order is important -- do not change:
     fromFetch(µb.localSettings, fetched);
-    onUserSettingsReady(fetched);
     fromFetch(µb.restoreBackupSettings, fetched);
+
+    µb.permanentFirewall.fromString(fetched.dynamicFilteringString);
+    µb.sessionFirewall.assign(µb.permanentFirewall);
+    µb.permanentURLFiltering.fromString(fetched.urlFilteringString);
+    µb.sessionURLFiltering.assign(µb.permanentURLFiltering);
+    µb.permanentSwitches.fromString(fetched.hostnameSwitchesString);
+    µb.sessionSwitches.assign(µb.permanentSwitches);
+
     onNetWhitelistReady(fetched.netWhitelist, adminExtra);
     onVersionReady(fetched.version);
 };
@@ -263,7 +295,6 @@ const createDefaultProps = function() {
         fetchableProps.hostnameSwitchesString += '\nno-csp-reports: * true';
     }
     toFetch(µb.localSettings, fetchableProps);
-    toFetch(µb.userSettings, fetchableProps);
     toFetch(µb.restoreBackupSettings, fetchableProps);
     return fetchableProps;
 };
@@ -301,7 +332,7 @@ try {
 
     // https://github.com/uBlockOrigin/uBlock-issues/issues/1365
     //   Wait for onCacheSettingsReady() to be fully ready.
-    await Promise.all([
+    const [ , , lastVersion ] = await Promise.all([
         µb.loadSelectedFilterLists().then(( ) => {
             log.info(`List selection ready ${Date.now()-vAPI.T0} ms after launch`);
         }),
@@ -314,11 +345,22 @@ try {
         vAPI.storage.get(createDefaultProps()).then(fetched => {
             log.info(`First fetch ready ${Date.now()-vAPI.T0} ms after launch`);
             onFirstFetchReady(fetched, adminExtra);
+            return fetched.version;
+        }),
+        µb.loadUserSettings().then(fetched => {
+            log.info(`User settings ready ${Date.now()-vAPI.T0} ms after launch`);
+            onUserSettingsReady(fetched);
         }),
         µb.loadPublicSuffixList().then(( ) => {
             log.info(`PSL ready ${Date.now()-vAPI.T0} ms after launch`);
         }),
     ]);
+
+    // https://github.com/uBlockOrigin/uBlock-issues/issues/1547
+    if ( lastVersion === '0.0.0.0' && vAPI.webextFlavor.soup.has('chromium') ) {
+        vAPI.app.restart();
+        return;
+    }
 } catch (ex) {
     console.trace(ex);
 }

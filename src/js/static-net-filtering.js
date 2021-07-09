@@ -3437,7 +3437,7 @@ FilterContainer.prototype.freeze = function() {
     this.optimizeTimerId = self.requestIdleCallback(( ) => {
         this.optimizeTimerId = undefined;
         this.optimize();
-    }, { timeout: 10000 });
+    }, { timeout: 5000 });
 
     log.info(`staticNetFilteringEngine.freeze() took ${Date.now()-t0} ms`);
 };
@@ -4131,7 +4131,20 @@ FilterContainer.prototype.matchStringReverse = function(type, url) {
 // https://github.com/chrisaljoudi/uBlock/issues/519
 //   Use exact type match for anything beyond `other`. Also, be prepared to
 //   support unknown types.
+// https://github.com/uBlockOrigin/uBlock-issues/issues/1501
+//   Add support to evaluate allow realm before block realm.
 
+/**
+ * Matches a URL string using filtering context.
+ * @param {FilteringContext} fctxt - The filtering context
+ * @param {integer} [modifier=0] - A bit vector modifying the behavior of the
+ *   matching algorithm:
+ *   Bit 0: match exact type.
+ *   Bit 1: lookup allow realm regardless of whether there was a match in
+ *          block realm.
+ *
+ * @returns {integer} 0=no match, 1=block, 2=allow (exeption)
+ */
 FilterContainer.prototype.matchString = function(fctxt, modifiers = 0) {
     let typeValue = typeNameToTypeValue[fctxt.type];
     if ( modifiers === 0 ) {
@@ -4159,17 +4172,18 @@ FilterContainer.prototype.matchString = function(fctxt, modifiers = 0) {
     $docEntity.reset();
     $requestHostname = fctxt.getHostname();
 
-    // Important block filters.
+    // Important block realm.
     if ( this.realmMatchString(BlockImportant, typeValue, partyBits) ) {
         return 1;
     }
-    // Block filters
-    if ( this.realmMatchString(BlockAction, typeValue, partyBits) ) {
-        // Exception filters
+
+    // Evaluate block realm before allow realm.
+    const r = this.realmMatchString(BlockAction, typeValue, partyBits);
+    if ( r || (modifiers & 0b0010) !== 0 ) {
         if ( this.realmMatchString(AllowAction, typeValue, partyBits) ) {
             return 2;
         }
-        return 1;
+        if ( r ) { return 1; }
     }
     return 0;
 };
@@ -4254,6 +4268,9 @@ FilterContainer.compareRedirectRequests = function(a, b) {
 
 /******************************************************************************/
 
+// https://github.com/uBlockOrigin/uBlock-issues/issues/1626
+//   Do not redirect when the number of query parameters does not change.
+
 FilterContainer.prototype.filterQuery = function(fctxt) {
     const directives = this.matchAndFetchModifiers(fctxt, 'queryprune');
     if ( directives === undefined ) { return; }
@@ -4263,6 +4280,7 @@ FilterContainer.prototype.filterQuery = function(fctxt) {
     let hpos = url.indexOf('#', qpos + 1);
     if ( hpos === -1 ) { hpos = url.length; }
     const params = new Map(new self.URLSearchParams(url.slice(qpos + 1, hpos)));
+    const inParamCount = params.size;
     const out = [];
     for ( const directive of directives ) {
         if ( params.size === 0 ) { break; }
@@ -4308,14 +4326,16 @@ FilterContainer.prototype.filterQuery = function(fctxt) {
         }
     }
     if ( out.length === 0 ) { return; }
-    fctxt.redirectURL = url.slice(0, qpos);
-    if ( params.size !== 0 ) {
-        fctxt.redirectURL += '?' + Array.from(params).map(a =>
-            a[1] === '' ? a[0] : `${a[0]}=${encodeURIComponent(a[1])}`
-        ).join('&');
-    }
-    if ( hpos !== url.length ) {
-        fctxt.redirectURL += url.slice(hpos);
+    if ( params.size !== inParamCount ) {
+        fctxt.redirectURL = url.slice(0, qpos);
+        if ( params.size !== 0 ) {
+            fctxt.redirectURL += '?' + Array.from(params).map(a =>
+                a[1] === '' ? a[0] : `${a[0]}=${encodeURIComponent(a[1])}`
+            ).join('&');
+        }
+        if ( hpos !== url.length ) {
+            fctxt.redirectURL += url.slice(hpos);
+        }
     }
     return out;
 };
