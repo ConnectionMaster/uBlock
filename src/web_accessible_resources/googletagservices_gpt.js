@@ -68,12 +68,13 @@
         disableInitialLoad: noopfn,
         display: noopfn,
         enableAsyncRendering: noopfn,
+        enableLazyLoad: noopfn,
         enableSingleRequest: noopfn,
         enableSyncRendering: noopfn,
         enableVideoAds: noopfn,
         get: noopnullfn,
         getAttributeKeys: nooparrayfn,
-        getTargeting: noopfn,
+        getTargeting: nooparrayfn,
         getTargetingKeys: nooparrayfn,
         getSlots: nooparrayfn,
         refresh: noopfn,
@@ -145,6 +146,7 @@
     gpt.pubads = function() { return pubAdsService; };
     gpt.pubadsReady = true;
     gpt.setAdIframeTitle = noopfn;
+    gpt.setConfig = noopfn;
     gpt.sizeMapping = function() { return new SizeMappingBuilder(); };
     window.googletag = gpt;
     while ( cmd.length !== 0 ) {

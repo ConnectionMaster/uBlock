@@ -20,7 +20,6 @@ for dir in $SRC/*/; do
   deslang=${srclang/-/_}
   deslang=${deslang%_AM}
   deslang=${deslang%_ES}
-  deslang=${deslang%_IE}
   deslang=${deslang%_IN}
   deslang=${deslang%_LK}
   deslang=${deslang%_NL}
@@ -35,6 +34,7 @@ for dir in $SRC/*/; do
   mkdir -p "$DESMV3/$deslang/" && cp "$SRC/$srclang/uBO-Lite/messages.json" "$DESMV3/$deslang/"
   # descriptions
   #cp "$SRC/$srclang/description.txt" "./dist/description/description-${deslang}.txt"
+  cp "$SRC/$srclang/uBO-Lite/webstore.txt" "./platform/mv3/description/webstore.$deslang.txt"
 done
 
 # Output files with possible misuse of `$`, as this can lead to severe
